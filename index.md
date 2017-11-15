@@ -39,7 +39,7 @@ We reduce our problem to neural document ranking, considering all the content of
 
 At the most abstract level, document ranking is described as,
 
-![image](https://github.com/jainayush975/IRE-MAJOR-PROJECT/blob/master/images/image1.png)
+![image](https://raw.githubusercontent.com/jainayush975/IRE-MAJOR-PROJECT/master/images/image1.png)
 
 - Neural document ranking differs in whether neural model is applied at representation stage or matching stage or both.
 
@@ -58,7 +58,7 @@ Generating the embeddings is done using below methods,
 - Now given a query, compute it R(q). For every document in the corpus compute R(d). Rank the documents using cosine similarity.
 
 
-##Evaluation Metrics
+## Evaluation Metrics
 - **Precision**: Fraction of retrieved documents that are relevant.
 - **Recall**: Fraction of relevant documents that are retrieved.
 - **NDCG**: For a query q, let relevance level of document ranked j wrt q be rq(j).
