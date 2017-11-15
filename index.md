@@ -27,7 +27,72 @@ These include relevant movies as answers or comments by humans. Hence this the a
 
 ## Datasets
 
-## IMDB
+### IMDB
+We crawled data for 3500 movies from IMDB. Movies on IMDB are categorised into 23 genres namely Action, Adventure, Animation, Biography, Comedy, Crime, Documentary, Drama, Family, Fantasy, Film-Noir, History, Horror, Music, Musical, Mystery, Romance, Sci-Fi, Short, Sport, Thriller, War and Western. We crawled around top ~ 150 movies for each genre, sorted by number of votes. Number of votes was chosen as sorting order because usually more votes means more reviews. This also eliminated movies which haven’t been released yet and hence carry no reviews. Hence for each movie, we have the following fields:
+
+1. Genre
+2. Plot
+3. Directors
+4. Writers
+5. Stars
+6. Rating
+7. Similar movies
+8. Plot keywords
+
+For each movie, top 50 reviews sorted by most helpful, were collected. Only about 10 of the total movies had less than 50 reviews, but still had at least ~20 reviews. Each review is written as a title, text pair.
+
+
+### Amazon product data for Movies and TV
+
+This is a publically available [Dataset](http://jmcauley.ucsd.edu/data/amazon/). From this we extract product id and reviews for each product. We map product id to Unique movie ids collected from IMDB. The reviews are a tuple of following fields:
+
+1. Review Text
+2. Summary
+3. Overall Rating.
+
+
+### Wikipedia Dataset
+
+[wiki\_data.json](https://raw.githubusercontent.com/rehassachdeva/Movie-Recommendation---IRE-Group-11/master/Data/wiki\%20data/wiki_data.json)
+We crawled data from the wikipedia page of each of the 3500 movies in our database from IMDB. For each movie, we organised the data into the following fields:
+
+1. Cinematography
+2. Country
+3. Critical Response
+4. Directed by
+5. Distributed by
+6. Language
+7. Produced by
+8. Release date
+9. Running time
+10. Plot 
+
+
+### Reddit Data
+
+Reddit has a lot of threads where user describe the kind of movies they are interseted in watching, followed by a lot of comments as answers. The crawled reddit data is organised as following fields:
+
+1. Title of post.
+2. Link to the post.
+3. Description of query.
+4. List of comments.
+
+
+### StackExchange Data
+StackExchange Data was also obtained in the same way as reddit data. Only posts with positive votes were considered while crawling.
+
+1. Title of post.
+2. Link to the post.
+3. Votes on comment followed by comment.
+
+
+### QRel data creation
+QUERY RELEVANCE SET}(qrels) for query $q$ we generate a small number $m$ of query aspects. Using a single IR system, we run each query aspect against the documents. The union of the top $k$ documents retrieved for each aspect constitutes a list of pseudo-qrels for $q$. From this point, evaluation proceeds in the usual fashion, merely substituting pseudo-qrels for human-judged qrels. The core idea is that
+the set of query aspects articulates different facets of the underlying information need. Running each aspect as a query against $D$ allows us to cast a wide net, collecting what is hopefully a variety of relevant documents. We assigned relevance judgement in 3 broader categories.
+
+1. A 0 relevance indicates that for a given movie, the recommendation is totally irrelevant for all category, details etc.
+2. A relevance of 1 indicates that the movie is partially relevant to the recommendation. Example either the details or the genre is similar.
+3. A relevance of 2 indicates that the movie is totally relevant to the answers of recommendations. 
 
 ## Baseline Approach
 Our baseline approach is based on creating an index for the movies based on the content in their reviews. We have used Apache Solr for indexing and retrieving the Top 40 results. All the reviews from IMDB, Amazon and WIkipedia were aggregated into a document for each movie. Solr interface can then take a user query and match it to the indexed documents, returning a list of top 40 movies for the query.
@@ -58,6 +123,20 @@ Generating the embeddings is done using below methods,
 - Now given a query, compute it R(q). For every document in the corpus compute R(d). Rank the documents using cosine similarity.
 
 
+### DSSM: Compute Similarity in Semantic Space
+
+It consists of 5 layers.
+
+1. Input as a sequence of terms of texts X and Y.
+2. Word hashing: use sub-word unit (e.g.,letter n-gram) as raw input to handle very large vocabulary.
+3. Convolutional and Max-pooling layer: identify key words/concepts in X and Y.
+4. Representation: use DNN to extract abstract semantic representations.
+5. Learning: maximize the similarity between X (source) and Y (target).
+
+![image](https://raw.githubusercontent.com/jainayush975/IRE-MAJOR-PROJECT/master/images/dssm.png)
+
+For more details about each layer refer the report.
+
 ## Evaluation Metrics
 - **Precision**: Fraction of retrieved documents that are relevant.
 - **Recall**: Fraction of relevant documents that are retrieved.
@@ -65,7 +144,7 @@ Generating the embeddings is done using below methods,
   * rq(j)=0 means totally irrelevant
   * Response list is inspected up to rank L.
   * Discounted cumulative gain for query q is,
-    * Include formula for NDCG
+    * ![image](https://raw.githubusercontent.com/jainayush975/IRE-MAJOR-PROJECT/master/images/image2.png)
   * Zq is a normalization factor that ensures the perfect ordering has NDCGq = 1.
   * Overall NDCG is average of NDCGq over all q
 
