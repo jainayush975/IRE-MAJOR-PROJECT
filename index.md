@@ -5,7 +5,7 @@ Websites such as IMDB, Amazon, Wikipedia have a number of reviews about various 
 1. Retrieval step: Retrieve top-k passages given a query.
 2. Comprehension step: Comprehend the answer from the top-k passages retrieved.
 
-##Example Queries with recommendations
+## Example Queries with recommendations
 
 | Query         | Recommendations|
 | ------------- |:-------------:|
